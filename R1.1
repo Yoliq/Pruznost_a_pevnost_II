@@ -1,0 +1,38 @@
+import numpy as np
+
+cislo = 32                      # volim podle seznamu
+
+a = (400 + 10*cislo)            # [mm]
+d = 30                          # [mm]
+T = 120                         # [°C]
+alpha = 1.2 * 10**(-5)          # [°C^(-1)]
+E = 200000                      # [MPa]
+e = 17                          # [mm]
+q = 5                           # [N/mm]
+
+''''''''''''''''''''''''''''''''''''''
+J = d**4/12
+
+A1 = np.array([[1, 0, 1, 0],       # matice A1
+              [0, 1, 0, 0], 
+              [0, 0, 0, 1],
+              [0, 0, a**3*np.pi/(2*E*J), 0]])
+
+
+g = np.array([[0],                              # matice g
+              [q*a],
+              [-q*a**2/2],
+              [-e-3*a*(1+alpha*T)]])
+
+
+Ainv = np.linalg.inv(A1)                        # inverzni matice k matici A1
+
+
+
+Z = np.dot(Ainv,g)                              # matice reseni Z, vznikla vynasobenim matic A^(-1) * b
+
+print()
+print("A [N]: ", float(Z[0]))                        # vypise vysledky
+print("B [N]: ", float(Z[1]))
+print("C [N]: ", float(Z[2]))
+print("M [N.m]: ", float(Z[3]))
